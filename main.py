@@ -13,7 +13,6 @@ def special_function(x):
 # Matrix Multiplication
 def matrix_multiplication(matrix_1, matrix_2):
     mat1_high = len(matrix_1)
-    mat2_high = len(matrix_2)
     mat1_width = len(matrix_1[0])
     mat2_width = len(matrix_2[0])
 
@@ -24,6 +23,20 @@ def matrix_multiplication(matrix_1, matrix_2):
             new_matrix[y][x] = sum(matrix_1[y][i] * matrix_2[i][x] for i in range(mat1_width))
 
     return  new_matrix
+
+
+# Matrix subtraction
+def matrix_subtraction(matrix_1, matrix_2):
+    mat_high = len(matrix_1)
+    mat_width = len(matrix_1[0])
+
+    new_matrix = [[0 for _ in range(mat_high)] for _ in range(mat_width)]
+
+    for y in range(mat_high):
+        for x in range(mat_width):
+            new_matrix[y][x] = matrix_1[y][x] - matrix_2[y][x]
+
+    return new_matrix
 
 
 # Exercise A - create matrix equation
@@ -58,6 +71,6 @@ def create_matrix_equation(matrix_size, fun):
 if __name__ == '__main__':
     n = 967
     a_matrix, b_matrix = create_matrix_equation(n, special_function)
-    a = [[1], [2]]
-    b = [[3, 4]]
-    c = matrix_multiplication(a, b)
+    a = [[2, 8], [0, 9]]
+    b = [[5, 6], [11, 3]]
+    c = matrix_subtraction(a, b)
