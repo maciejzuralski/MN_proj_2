@@ -10,7 +10,7 @@ def special_function(x):
     return math.sin(x * 4)
 
 
-# Matrix Multiplication
+# Calculate matrix Multiplication
 def matrix_multiplication(matrix_1, matrix_2):
     mat1_high = len(matrix_1)
     mat1_width = len(matrix_1[0])
@@ -22,10 +22,10 @@ def matrix_multiplication(matrix_1, matrix_2):
         for x in range(mat2_width):
             new_matrix[y][x] = sum(matrix_1[y][i] * matrix_2[i][x] for i in range(mat1_width))
 
-    return  new_matrix
+    return new_matrix
 
 
-# Matrix subtraction
+# Calculate matrix subtraction
 def matrix_subtraction(matrix_1, matrix_2):
     mat_high = len(matrix_1)
     mat_width = len(matrix_1[0])
@@ -66,6 +66,15 @@ def create_matrix_equation(matrix_size, fun):
     b_matrix_new[matrix_size - 1][0] = fun(matrix_size - 1)
 
     return a_matrix_new, b_matrix_new
+
+
+# Calculate vector residuum
+def vector_residuum(matrix_a, matrix_x, matrix_b):
+    return matrix_subtraction(matrix_multiplication(matrix_a, matrix_x), matrix_b)
+
+
+# Split matrix to L, U, D
+def 
 
 
 if __name__ == '__main__':
