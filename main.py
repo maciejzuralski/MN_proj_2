@@ -45,8 +45,8 @@ def create_matrix_equation(matrix_size, fun):
     a2 = -1
     a3 = -1
 
-    a_matrix_new = [[0 for _ in range(n)] for _ in range(n)]
-    b_matrix_new = [[0] for _ in range(n)]
+    a_matrix_new = [[0 for _ in range(matrix_size)] for _ in range(matrix_size)]
+    b_matrix_new = [[0] for _ in range(matrix_size)]
 
     for i in range(matrix_size - 2):
         a_matrix_new[i][i] = a1
@@ -74,12 +74,27 @@ def vector_residuum(matrix_a, matrix_x, matrix_b):
 
 
 # Split matrix to L, U, D
-def 
+def split_matrix_to_L_U_D(matrix):
+    width = len(matrix)
+
+    L = [[0 for _ in range(width)] for _ in range(width)]
+    U = [[0 for _ in range(width)] for _ in range(width)]
+    D = [[0 for _ in range(width)] for _ in range(width)]
+
+    for y in range(width):
+        for x in range(width):
+            if x < y:
+                L[y][x] = matrix[y][x]
+            elif y < x:
+                U[y][x] = matrix[y][x]
+            elif x == y:
+                D[y][x] = matrix[y][x]
+
+    return L, U, D
 
 
 if __name__ == '__main__':
     n = 967
-    a_matrix, b_matrix = create_matrix_equation(n, special_function)
-    a = [[2, 8], [0, 9]]
-    b = [[5, 6], [11, 3]]
-    c = matrix_subtraction(a, b)
+    a_matrix, b_matrix = create_matrix_equation(20, special_function)
+    split_matrix_to_L_U_D(a_matrix)
+
