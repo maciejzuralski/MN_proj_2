@@ -16,7 +16,7 @@ def matrix_multiplication(matrix_1, matrix_2):
     mat1_width = len(matrix_1[0])
     mat2_width = len(matrix_2[0])
 
-    new_matrix = [[0 for _ in range(mat1_high)] for _ in range(mat2_width)]
+    new_matrix = [[0 for _ in range(mat2_width)] for _ in range(mat1_high)]
 
     for y in range(mat1_high):
         for x in range(mat2_width):
@@ -30,11 +30,25 @@ def matrix_subtraction(matrix_1, matrix_2):
     mat_high = len(matrix_1)
     mat_width = len(matrix_1[0])
 
-    new_matrix = [[0 for _ in range(mat_high)] for _ in range(mat_width)]
+    new_matrix = [[0 for _ in range(mat_width)] for _ in range(mat_high)]
 
     for y in range(mat_high):
         for x in range(mat_width):
             new_matrix[y][x] = matrix_1[y][x] - matrix_2[y][x]
+
+    return new_matrix
+
+
+# Calculate matrix addition
+def matrix_addition(matrix_1, matrix_2):
+    mat_high = len(matrix_1)
+    mat_width = len(matrix_1[0])
+
+    new_matrix = [[0 for _ in range(mat_width)] for _ in range(mat_high)]
+
+    for y in range(mat_high):
+        for x in range(mat_width):
+            new_matrix[y][x] = matrix_1[y][x] + matrix_2[y][x]
 
     return new_matrix
 
@@ -47,6 +61,7 @@ def create_matrix_equation(matrix_size, fun):
 
     a_matrix_new = [[0 for _ in range(matrix_size)] for _ in range(matrix_size)]
     b_matrix_new = [[0] for _ in range(matrix_size)]
+    x_matrix_new = [[0] for _ in range(matrix_size)]
 
     for i in range(matrix_size - 2):
         a_matrix_new[i][i] = a1
@@ -65,12 +80,19 @@ def create_matrix_equation(matrix_size, fun):
     b_matrix_new[matrix_size - 2][0] = fun(matrix_size - 2)
     b_matrix_new[matrix_size - 1][0] = fun(matrix_size - 1)
 
-    return a_matrix_new, b_matrix_new
+    return a_matrix_new, x_matrix_new, b_matrix_new
 
 
 # Calculate vector residuum
-def vector_residuum(matrix_a, matrix_x, matrix_b):
-    return matrix_subtraction(matrix_multiplication(matrix_a, matrix_x), matrix_b)
+def vector_residuum_norm(matrix_a, matrix_x, matrix_b):
+    residiuum = matrix_subtraction(matrix_multiplication(matrix_a, matrix_x), matrix_b)
+    norm = 0
+
+    for y in range(len(residiuum)):
+        for x in range(len(residiuum[0])):
+            norm += residiuum[y][x] * residiuum[y][x]
+
+    return math.sqrt(norm)
 
 
 # Split matrix to L, U, D
@@ -93,8 +115,47 @@ def split_matrix_to_L_U_D(matrix):
     return L, U, D
 
 
+# Diagonal matrix inversion
+def diagonal_matrix_inversion(matrix):
+    for i in range(len(matrix)):
+        matrix[i][i] = 1/matrix[i][i]
+
+    return matrix
+
+
+# Matrix sigh change
+def matrix_sigh_change(matrix):
+    for y in range(len(matrix)):
+        for x in range(len(matrix)):
+            matrix[y][x] = matrix[y][x] * -1
+
+    return matrix
+
+
+# Jacobi
+def jacobi(A, x, b, max_error):
+    residuum = 100
+    residuum_arr = []
+    iteration = 0
+
+    L, U, D = split_matrix_to_L_U_D(A)
+    D_inv = diagonal_matrix_inversion(D)
+    M = matrix_multiplication(matrix_sigh_change(D_inv), matrix_addition(L, U))
+    Bm = matrix_multiplication(D_inv, b)
+    L_plus_U = matrix_addition(L, U)
+
+    while max_error < residuum:
+        #x = matrix_multiplication(D_inv, matrix_subtraction(b, matrix_multiplication(L_plus_U, x)))
+        x = matrix_addition(matrix_multiplication(M, x), Bm)
+        residuum = vector_residuum_norm(A, x, b)
+        residuum_arr.append(residuum)
+        iteration += 1
+
+    return x, residuum_arr, iteration
+
+
 if __name__ == '__main__':
     n = 967
-    a_matrix, b_matrix = create_matrix_equation(20, special_function)
-    split_matrix_to_L_U_D(a_matrix)
+    A, x, b = create_matrix_equation(20, special_function)
+    x, jacobi_err, jacobi_iter = jacobi(A, x, b, 1e-9)
 
