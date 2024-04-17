@@ -117,19 +117,21 @@ def split_matrix_to_L_U_D(matrix):
 
 # Diagonal matrix inversion
 def diagonal_matrix_inversion(matrix):
+    new_matrix = [[0 for _ in range(len(matrix[0]))] for _ in range(len(matrix))]
     for i in range(len(matrix)):
-        matrix[i][i] = 1/matrix[i][i]
+        new_matrix[i][i] = 1/matrix[i][i]
 
-    return matrix
+    return new_matrix
 
 
 # Matrix sigh change
 def matrix_sigh_change(matrix):
+    new_matrix = [[0 for _ in range(len(matrix[0]))] for _ in range(len(matrix))]
     for y in range(len(matrix)):
         for x in range(len(matrix)):
-            matrix[y][x] = matrix[y][x] * -1
+            new_matrix[y][x] = matrix[y][x] * -1
 
-    return matrix
+    return new_matrix
 
 
 # Jacobi
@@ -140,8 +142,8 @@ def jacobi(A, x, b, max_error):
 
     L, U, D = split_matrix_to_L_U_D(A)
     D_inv = diagonal_matrix_inversion(D)
-    M = matrix_multiplication(matrix_sigh_change(D_inv), matrix_addition(L, U))
     Bm = matrix_multiplication(D_inv, b)
+    M = matrix_sigh_change(matrix_multiplication(D_inv, matrix_addition(L, U)))
     L_plus_U = matrix_addition(L, U)
 
     while max_error < residuum:
@@ -158,4 +160,4 @@ if __name__ == '__main__':
     n = 967
     A, x, b = create_matrix_equation(20, special_function)
     x, jacobi_err, jacobi_iter = jacobi(A, x, b, 1e-9)
-
+    x = x
