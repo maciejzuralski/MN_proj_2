@@ -156,8 +156,21 @@ def jacobi(A, x, b, max_error):
     return x, residuum_arr, iteration
 
 
-# Matrix forward substitution
 def matrix_forward_substitution(L, b):
+    size = len(b)
+    x = [[0] for _ in range(size)]
+
+    for row in range(size):
+        x[row][0] = b[row][0]
+        for col in range(row):
+            x[row][0] -= L[row][col] * x[col][0]
+        x[row][0] /= L[row][row]
+
+    return x
+
+
+# Matrix forward substitution
+def my_matrix_forward_substitution(L, b):
     size = len(b)
     x = [[0] for _ in range(size)]
 
@@ -177,10 +190,9 @@ def gauss(A, x, b, max_error):
 
     L, U, D = split_matrix_to_L_U_D(A)
     L_plus_D = matrix_addition(L, D)
-    Bm = matrix_forward_substitution(L_plus_D, b)
 
     while max_error < residuum:
-        x = matrix_addition( matrix_forward_substitution(L_plus_D, matrix_multiplication(U, x)), Bm)
+        x = matrix_forward_substitution(L_plus_D, matrix_subtraction(b, matrix_multiplication(U, x)))
         residuum = vector_residuum_norm(A, x, b)
         residuum_arr.append(residuum)
         iteration += 1
