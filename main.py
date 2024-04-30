@@ -161,11 +161,11 @@ def matrix_forward_substitution(L, b):
     size = len(b)
     x = [[0] for _ in range(size)]
 
-    for row in range(size):
+    x[0][0] = b[0][0] / A[0][0]
+    for row in range(1, size):
         x[row][0] = b[row][0]
-        for col in range(row):
-            x[row][0] -= L[row][col] * x[col][0]
-        x[row][0] /= L[row][row]
+        suma = sum(L[row][col] * x[col][0] for col in range(row))
+        x[row][0] = (b[row][0] - suma) / L[row][row]
 
     return x
 
