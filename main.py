@@ -147,8 +147,40 @@ def jacobi(A, x, b, max_error):
     L_plus_U = matrix_addition(L, U)
 
     while max_error < residuum:
-        #x = matrix_multiplication(D_inv, matrix_subtraction(b, matrix_multiplication(L_plus_U, x)))
-        x = matrix_addition(matrix_multiplication(M, x), Bm)
+        x = matrix_multiplication(D_inv, matrix_subtraction(b, matrix_multiplication(L_plus_U, x)))
+        #x = matrix_addition(matrix_multiplication(M, x), Bm)
+        residuum = vector_residuum_norm(A, x, b)
+        residuum_arr.append(residuum)
+        iteration += 1
+
+    return x, residuum_arr, iteration
+
+
+# Matrix forward substitution
+def matrix_forward_substitution(L, b):
+    size = len(b)
+    x = [[0] for _ in range(size)]
+
+    for row in range(size):
+        x[row][0] = b[row][0]
+        for col in range(row):
+            x[row][0] -= L[row][col] * x[col][0]
+        x[row][0] /= L[row][row]
+
+    return x
+
+# Gauss
+def gauss(A, x, b, max_error):
+    residuum = 100
+    residuum_arr = []
+    iteration = 0
+
+    L, U, D = split_matrix_to_L_U_D(A)
+    L_plus_D = matrix_addition(L, D)
+    Bm = matrix_forward_substitution(L_plus_D, b)
+
+    while max_error < residuum:
+        x = matrix_addition( matrix_forward_substitution(L_plus_D, matrix_multiplication(U, x)), Bm)
         residuum = vector_residuum_norm(A, x, b)
         residuum_arr.append(residuum)
         iteration += 1
@@ -157,7 +189,9 @@ def jacobi(A, x, b, max_error):
 
 
 if __name__ == '__main__':
-    n = 967
-    A, x, b = create_matrix_equation(20, special_function)
-    x, jacobi_err, jacobi_iter = jacobi(A, x, b, 1e-9)
+    n = 200 # 967
+    #A, x, b = create_matrix_equation(n, special_function)
+    #jacobi_x, jacobi_err, jacobi_iter = jacobi(A, x, b, 1e-9)
+    A, x, b = create_matrix_equation(n, special_function)
+    gauss_x, gauss_err, gauss_iter = gauss(A, x, b, 1e-9)
     x = x
