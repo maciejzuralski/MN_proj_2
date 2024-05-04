@@ -229,16 +229,21 @@ def create_l_u(A):
 
 
 if __name__ == '__main__':
-    n = 200 # 967
-    a1 = 8  # 5 + 3 = 8
-    a2 = -1
-    a3 = -1
+    n = 967
+    #a1 = 8  # 5 + 3 = 8
+    #a2 = -1
+    #a3 = -1
     #A, x, b = create_matrix_equation(n, special_function)
     #jacobi_x, jacobi_err, jacobi_iter = jacobi(A, x, b, 1e-9)
-    A, x, b = create_matrix_equation(n, special_function, a1, a2, a3)
-    gauss_x, gauss_err, gauss_iter = gauss(A, x, b, 1e-9)
-    x = x
+    #A, x, b = create_matrix_equation(n, special_function, a1, a2, a3)
+    #gauss_x, gauss_err, gauss_iter = gauss(A, x, b, 1e-9)
+    #x = x
 
-    A = [[2,1,1,0],[4,3,3,1],[8,7,9,5],[6,7,9,8]]
+    a1 = 3
+    a2 = -1
+    a3 = -1
+    A, x, b = create_matrix_equation(n, special_function, a1, a2, a3)
     L, U = create_l_u(A)
-    x = x
+    x = my_matrix_backward_substitution(U, my_matrix_forward_substitution(L, b))
+    res = vector_residuum_norm(A, x, b)
+    print(res)
