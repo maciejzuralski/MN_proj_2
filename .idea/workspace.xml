@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a9b65e27-0c29-4208-9f85-84d8f3752a04" name="Changes" comment="my matrix_forward_substitution">
+    <list default="true" id="a9b65e27-0c29-4208-9f85-84d8f3752a04" name="Changes" comment="gauss working">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -98,21 +98,30 @@
       <option name="project" value="LOCAL" />
       <updated>1714468620759</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="gauss working">
+      <option name="closed" value="true" />
+      <created>1714485742956</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1714485742956</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="matrix_forward_substitution like in internet" />
     <MESSAGE value="my matrix_forward_substitution" />
-    <option name="LAST_COMMIT_MESSAGE" value="my matrix_forward_substitution" />
+    <MESSAGE value="gauss working" />
+    <option name="LAST_COMMIT_MESSAGE" value="gauss working" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>195</line>
-          <option name="timeStamp" value="6" />
+          <line>239</line>
+          <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

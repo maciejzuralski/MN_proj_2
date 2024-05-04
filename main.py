@@ -1,4 +1,5 @@
 # Maciej Żuralski 193367
+import copy
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -54,11 +55,7 @@ def matrix_addition(matrix_1, matrix_2):
 
 
 # Exercise A - create matrix equation
-def create_matrix_equation(matrix_size, fun):
-    a1 = 8  # 5 + 3 = 8
-    a2 = -1
-    a3 = -1
-
+def create_matrix_equation(matrix_size, fun, a1, a2, a3):
     a_matrix_new = [[0 for _ in range(matrix_size)] for _ in range(matrix_size)]
     b_matrix_new = [[0] for _ in range(matrix_size)]
     x_matrix_new = [[0] for _ in range(matrix_size)]
@@ -176,11 +173,24 @@ def my_matrix_forward_substitution(L, b):
 
     x[0][0] = b[0][0] / A[0][0]
     for row in range(1, size):
-        x[row][0] = b[row][0]
         suma = sum(L[row][col] * x[col][0] for col in range(row))
         x[row][0] = (b[row][0] - suma) / L[row][row]
 
     return x
+
+
+# Matrix backward substitution
+def my_matrix_backward_substitution(U, b):
+    size = len(b)
+    x = [[0] for _ in range(size)]
+
+    x[size - 1][0] = b[size - 1][0] / U[size - 1][size - 1]
+    for row in range(size - 2, -1, -1):
+        suma = sum(U[row][col] * x[col][0] for col in range(row + 1, size))
+        x[row][0] = (b[row][0] - suma) / U[row][row]
+
+    return x
+
 
 # Gauss
 def gauss(A, x, b, max_error):
@@ -200,10 +210,35 @@ def gauss(A, x, b, max_error):
     return x, residuum_arr, iteration
 
 
+# create lu for factorization
+def create_l_u(A):
+    n = len(A)
+    U = copy.deepcopy(A)
+    L = [[0] * n for _ in range(n)]
+
+    for i in range(n):
+        L[i][i] = 1
+
+    for i in range(1, n):
+        for j in range(i):
+            L[i][j] = U[i][j] / U[j][j]
+            for k in range(n):
+                U[i][k] -= L[i][j] * U[j][k]
+
+    return L, U
+
+
 if __name__ == '__main__':
     n = 200 # 967
+    a1 = 8  # 5 + 3 = 8
+    a2 = -1
+    a3 = -1
     #A, x, b = create_matrix_equation(n, special_function)
     #jacobi_x, jacobi_err, jacobi_iter = jacobi(A, x, b, 1e-9)
-    A, x, b = create_matrix_equation(n, special_function)
+    A, x, b = create_matrix_equation(n, special_function, a1, a2, a3)
     gauss_x, gauss_err, gauss_iter = gauss(A, x, b, 1e-9)
+    x = x
+
+    A = [[2,1,1,0],[4,3,3,1],[8,7,9,5],[6,7,9,8]]
+    L, U = create_l_u(A)
     x = x
