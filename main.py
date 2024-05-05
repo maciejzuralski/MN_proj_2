@@ -140,13 +140,11 @@ def jacobi(A, x, b, max_error):
 
     L, U, D = split_matrix_to_L_U_D(A)
     D_inv = diagonal_matrix_inversion(D)
-    Bm = matrix_multiplication(D_inv, b)
-    M = matrix_sigh_change(matrix_multiplication(D_inv, matrix_addition(L, U)))
     L_plus_U = matrix_addition(L, U)
 
     while max_error < residuum and iteration < 100:
-        #x = matrix_multiplication(D_inv, matrix_subtraction(b, matrix_multiplication(L_plus_U, x)))
-        x = matrix_addition(matrix_multiplication(M, x), Bm)
+        x = matrix_multiplication(D_inv, matrix_subtraction(b, matrix_multiplication(L_plus_U, x)))
+        #x = matrix_addition(matrix_multiplication(M, x), Bm)
         residuum = vector_residuum_norm(A, x, b)
         residuum_arr.append(residuum)
         iteration += 1
@@ -234,7 +232,7 @@ def create_l_u(A):
 
 # exercise B
 def ex_B():
-    n = 500#967
+    n = 967
     a1 = 8  # 5 + 3 = 8
     a2 = -1
     a3 = -1
@@ -268,7 +266,7 @@ def ex_B():
 
 # exercise C
 def ex_C():
-    n = 500  # 967
+    n = 967
     a1 = 3
     a2 = -1
     a3 = -1
@@ -299,13 +297,16 @@ def ex_C():
 
 # exercise D
 def ex_D():
-    n = 500  # 967
+    n = 967
     a1 = 3
     a2 = -1
     a3 = -1
     A, x, b = create_matrix_equation(n, special_function, a1, a2, a3)
+    start = time.time()
     L, U = create_l_u(A)
     x = my_matrix_backward_substitution(U, my_matrix_forward_substitution(L, b))
+    end = time.time()
+    print("LU factorization:", end - start)
     res = vector_residuum_norm(A, x, b)
     print(res)
 
@@ -328,12 +329,12 @@ def ex_E():
         gauss_x, gauss_err, gauss_iter = gauss(A, x, b, 1e-9)
         end = time.time()
         print("Gauss:", end - start)
-        A, x, b = create_matrix_equation(n, special_function, a1, a2, a3)
-        start = time.time()
-        L, U = create_l_u(A)
-        x = my_matrix_backward_substitution(U, my_matrix_forward_substitution(L, b))
-        end = time.time()
-        print("LU factorization:", end - start)
+        #A, x, b = create_matrix_equation(n, special_function, a1, a2, a3)
+        #start = time.time()
+        #L, U = create_l_u(A)
+        #x = my_matrix_backward_substitution(U, my_matrix_forward_substitution(L, b))
+        #end = time.time()
+        #print("LU factorization:", end - start)
 
 
 if __name__ == '__main__':
@@ -341,4 +342,3 @@ if __name__ == '__main__':
     # ex_C()
     # ex_D()
     # ex_E()
-    pass

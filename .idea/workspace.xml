@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a9b65e27-0c29-4208-9f85-84d8f3752a04" name="Changes" comment="lu factorization">
+    <list default="true" id="a9b65e27-0c29-4208-9f85-84d8f3752a04" name="Changes" comment="all exercises">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -122,7 +122,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714829435192</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="all exercises">
+      <option name="closed" value="true" />
+      <created>1714921612118</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1714921612118</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -131,7 +139,8 @@
     <MESSAGE value="gauss working" />
     <MESSAGE value="create lu matrices" />
     <MESSAGE value="lu factorization" />
-    <option name="LAST_COMMIT_MESSAGE" value="lu factorization" />
+    <MESSAGE value="all exercises" />
+    <option name="LAST_COMMIT_MESSAGE" value="all exercises" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
