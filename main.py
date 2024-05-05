@@ -1,8 +1,8 @@
 # Maciej Żuralski 193367
 import copy
 import math
-import numpy as np
 import matplotlib.pyplot as plt
+import time
 
 
 # Special function for exercise A
@@ -136,6 +136,7 @@ def jacobi(A, x, b, max_error):
     residuum = 100
     residuum_arr = []
     iteration = 0
+    iterations = []
 
     L, U, D = split_matrix_to_L_U_D(A)
     D_inv = diagonal_matrix_inversion(D)
@@ -143,14 +144,15 @@ def jacobi(A, x, b, max_error):
     M = matrix_sigh_change(matrix_multiplication(D_inv, matrix_addition(L, U)))
     L_plus_U = matrix_addition(L, U)
 
-    while max_error < residuum:
-        x = matrix_multiplication(D_inv, matrix_subtraction(b, matrix_multiplication(L_plus_U, x)))
-        #x = matrix_addition(matrix_multiplication(M, x), Bm)
+    while max_error < residuum and iteration < 100:
+        #x = matrix_multiplication(D_inv, matrix_subtraction(b, matrix_multiplication(L_plus_U, x)))
+        x = matrix_addition(matrix_multiplication(M, x), Bm)
         residuum = vector_residuum_norm(A, x, b)
         residuum_arr.append(residuum)
         iteration += 1
+        iterations.append(iteration)
 
-    return x, residuum_arr, iteration
+    return x, residuum_arr, iterations
 
 
 def matrix_forward_substitution(L, b):
@@ -171,7 +173,7 @@ def my_matrix_forward_substitution(L, b):
     size = len(b)
     x = [[0] for _ in range(size)]
 
-    x[0][0] = b[0][0] / A[0][0]
+    x[0][0] = b[0][0] / L[0][0]
     for row in range(1, size):
         suma = sum(L[row][col] * x[col][0] for col in range(row))
         x[row][0] = (b[row][0] - suma) / L[row][row]
@@ -197,17 +199,19 @@ def gauss(A, x, b, max_error):
     residuum = 100
     residuum_arr = []
     iteration = 0
+    iterations = []
 
     L, U, D = split_matrix_to_L_U_D(A)
     L_plus_D = matrix_addition(L, D)
 
-    while max_error < residuum:
+    while max_error < residuum and iteration < 100:
         x = matrix_forward_substitution(L_plus_D, matrix_subtraction(b, matrix_multiplication(U, x)))
         residuum = vector_residuum_norm(A, x, b)
         residuum_arr.append(residuum)
         iteration += 1
+        iterations.append(iteration)
 
-    return x, residuum_arr, iteration
+    return x, residuum_arr, iterations
 
 
 # create lu for factorization
@@ -228,17 +232,74 @@ def create_l_u(A):
     return L, U
 
 
-if __name__ == '__main__':
-    n = 967
-    #a1 = 8  # 5 + 3 = 8
-    #a2 = -1
-    #a3 = -1
-    #A, x, b = create_matrix_equation(n, special_function)
-    #jacobi_x, jacobi_err, jacobi_iter = jacobi(A, x, b, 1e-9)
-    #A, x, b = create_matrix_equation(n, special_function, a1, a2, a3)
-    #gauss_x, gauss_err, gauss_iter = gauss(A, x, b, 1e-9)
-    #x = x
+# exercise B
+def ex_B():
+    n = 500#967
+    a1 = 8  # 5 + 3 = 8
+    a2 = -1
+    a3 = -1
+    A, x, b = create_matrix_equation(n, special_function, a1, a2, a3)
+    start = time.time()
+    jacobi_x, jacobi_err, jacobi_iter = jacobi(A, x, b, 1e-9)
+    end = time.time()
+    print("Jacobi:", end - start)
+    A, x, b = create_matrix_equation(n, special_function, a1, a2, a3)
+    start = time.time()
+    gauss_x, gauss_err, gauss_iter = gauss(A, x, b, 1e-9)
+    end = time.time()
+    print("Gauss:", end - start)
 
+    plt.figure()
+    plt.plot(jacobi_iter,jacobi_err)
+    plt.yscale('log')
+    plt.xlabel('iterations')
+    plt.ylabel('error norm')
+    plt.title('Jacobi method')
+    plt.show()
+
+    plt.figure()
+    plt.plot(gauss_iter, gauss_err)
+    plt.yscale('log')
+    plt.xlabel('iterations')
+    plt.ylabel('error norm')
+    plt.title('Gauss method')
+    plt.show()
+
+
+# exercise C
+def ex_C():
+    n = 500  # 967
+    a1 = 3
+    a2 = -1
+    a3 = -1
+    A, x, b = create_matrix_equation(n, special_function, a1, a2, a3)
+    jacobi_x, jacobi_err, jacobi_iter = jacobi(A, x, b, 1e-9)
+    A, x, b = create_matrix_equation(n, special_function, a1, a2, a3)
+    gauss_x, gauss_err, gauss_iter = gauss(A, x, b, 1e-9)
+
+    print("J min:", min(jacobi_err))
+    print("G min:", min(gauss_err))
+
+    plt.figure()
+    plt.plot(jacobi_iter, jacobi_err)
+    plt.yscale('log')
+    plt.xlabel('iterations')
+    plt.ylabel('error norm')
+    plt.title('Jacobi method')
+    plt.show()
+
+    plt.figure()
+    plt.plot(gauss_iter, gauss_err)
+    plt.yscale('log')
+    plt.xlabel('iterations')
+    plt.ylabel('error norm')
+    plt.title('Gauss method')
+    plt.show()
+
+
+# exercise D
+def ex_D():
+    n = 500  # 967
     a1 = 3
     a2 = -1
     a3 = -1
@@ -247,3 +308,37 @@ if __name__ == '__main__':
     x = my_matrix_backward_substitution(U, my_matrix_forward_substitution(L, b))
     res = vector_residuum_norm(A, x, b)
     print(res)
+
+
+# exercise E
+def ex_E():
+    Ns = [100, 500, 1000, 3000]
+    for n in Ns:
+        print("For n =", n, "time in second")
+        a1 = 8  # 5 + 3 = 8
+        a2 = -1
+        a3 = -1
+        A, x, b = create_matrix_equation(n, special_function, a1, a2, a3)
+        start = time.time()
+        jacobi_x, jacobi_err, jacobi_iter = jacobi(A, x, b, 1e-9)
+        end = time.time()
+        print("Jacobi:", end - start)
+        A, x, b = create_matrix_equation(n, special_function, a1, a2, a3)
+        start = time.time()
+        gauss_x, gauss_err, gauss_iter = gauss(A, x, b, 1e-9)
+        end = time.time()
+        print("Gauss:", end - start)
+        A, x, b = create_matrix_equation(n, special_function, a1, a2, a3)
+        start = time.time()
+        L, U = create_l_u(A)
+        x = my_matrix_backward_substitution(U, my_matrix_forward_substitution(L, b))
+        end = time.time()
+        print("LU factorization:", end - start)
+
+
+if __name__ == '__main__':
+    # ex_B()
+    # ex_C()
+    # ex_D()
+    # ex_E()
+    pass
